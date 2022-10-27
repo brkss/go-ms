@@ -2,6 +2,8 @@ package main
 
 import (
 	"log"
+	"net"
+	"net/http"
 	"net/rpc"
 )
 
@@ -67,6 +69,19 @@ func main() {
 
 	if err != nil {
 		log.Fatal("Error registering API : ", err)
+	}
+
+	rpc.HandleHTTP()
+	listener, err := net.Listen("tcp", ":4040")
+	if err != nil {
+		log.Fatal("Listener error : ", err)
+	}
+
+	log.Println("🚀 server running at http://localhost:40404")
+	err = http.Serve(listener, nil)
+
+	if err != nil {
+		log.Fatal("Error serving : ", err)
 	}
 
 	/*
